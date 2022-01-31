@@ -41,7 +41,21 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
         Articles articles = articlesArrayList.get(position);
         holder.subTitleTV.setText(articles.getDescription());
         holder.titleTV.setText(articles.getTitle());
+        holder.pubDate.setText("Date: " +articles.getPubDate());
         Glide.with(context).load(articles.getUrlToImage()).error(R.drawable.newsimage).into(holder.newsIV);
+        // Share Button
+        holder.shareOpt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareLink = new Intent(Intent.ACTION_SEND);
+                shareLink.setType("text/plain");
+                shareLink.putExtra(Intent.EXTRA_TEXT, articles.getUrl()+"");
+                // passing subject of the content
+                Intent shareIntent = Intent.createChooser(shareLink, "Share Using");
+                context.startActivity(shareIntent);
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,11 +77,13 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
 
     // Inner class
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleTV , subTitleTV;
-        private ImageView newsIV;
+        private TextView titleTV , subTitleTV , pubDate;
+        private ImageView newsIV , shareOpt;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             newsIV = itemView.findViewById(R.id.idIVNews);
+            shareOpt = itemView.findViewById(R.id.shareOption);
+            pubDate = itemView.findViewById(R.id.idTVPubDate);
             titleTV = itemView.findViewById(R.id.idTVNewsHeading);
             subTitleTV = itemView.findViewById(R.id.idTVSubTitle);
         }

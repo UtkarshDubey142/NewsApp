@@ -47,6 +47,18 @@
                 android:textColor="@color/white"
                 android:textSize="18dp" />
 
+            <TextView
+                android:id="@+id/idTVPubDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/idTVSubDesc"
+                android:layout_margin="4dp"
+                android:padding="4dp"
+                android:text="Date"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+
         </RelativeLayout>
 
     </ScrollView>
