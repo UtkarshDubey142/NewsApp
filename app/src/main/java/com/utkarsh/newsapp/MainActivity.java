@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         categoryRV.setAdapter(categoryRVAdapter);
         getCategory();
         getNews("All");
+        newsRVAdapter.notifyDataSetChanged();
     }
 
     private void getCategory ()
