@@ -26,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.CategoryClickInterface{
 
@@ -80,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
             url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language=en&category="+category;
         }
 
-
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this , "Failed To Get News" , Toast.LENGTH_LONG).show();
                         Log.i("error >>" , "not worked");
                     }
                 });
