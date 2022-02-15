@@ -17,7 +17,7 @@
             android:id="@+id/feed_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/black_shade_1"/>
+            android:background="@color/color_for_actionbar"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="?attr/actionBarSize"

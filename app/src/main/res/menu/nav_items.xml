@@ -13,9 +13,19 @@
             <item
                 android:id="@+id/english"
                 android:title="English" />
+
             <item
-                android:id="@+id/jap"
+                android:id="@+id/japanese"
                 android:title="Japanese" />
+
+            <item
+                android:id="@+id/french"
+                android:title="French" />
+
+            <item
+                android:id="@+id/german"
+                android:title="German" />
+
         </menu>
     </item>
 </menu>

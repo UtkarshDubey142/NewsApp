@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_array_japanese">
+        <item>世界</item>
+        <item>上</item>
+        <item>テクノロジー</item>
+        <item>理科</item>
+        <item>スポーツ</item>
+        <item>仕事</item>
+        <item>エンターテイメント</item>
+        <item>健康</item>
+    </string-array>
+
+    <string-array name="category_array_german">
+        <item>Welt</item>
+        <item>oben</item>
+        <item>Technologie</item>
+        <item>Wissenschaft</item>
+        <item>Sport</item>
+        <item>Geschäft</item>
+        <item>Unterhaltung</item>
+        <item>die Gesundheit</item>
+    </string-array>
+
+    <string-array name="category_array_french">
+        <item>monde</item>
+        <item>Haut</item>
+        <item>La technologie</item>
+        <item>Wissenschaft</item>
+        <item>des sports</item>
+        <item>Entreprise</item>
+        <item>divertissement</item>
+        <item>santé</item>
+    </string-array>
+
+    <string-array name="category_array_english">
+        <item>World</item>
+        <item>Top</item>
+        <item>Technology</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Business</item>
+        <item>Entertainment</item>
+        <item>Health</item>
+    </string-array>
+
+</resources>

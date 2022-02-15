@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,12 +49,13 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     DrawerLayout mDrawerLayout;
     SharedPreferences sharedPreferences;
     public static String LANGUAGE = "lang";
+    String [] category_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("UserLanguage", MODE_PRIVATE);
         categoryRV = findViewById(R.id.idRVCategory);
         newsRV = findViewById(R.id.idRVNews);
         loadingPB = findViewById(R.id.idPBLoading);
@@ -68,9 +70,8 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         Toolbar toolbar = findViewById(R.id.feed_toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.open, R.string.close);
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.yellow));
         mDrawerLayout.addDrawerListener(toggle);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -83,14 +84,32 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
 
     private void getCategory ()
     {
-        categoryRVModalArrayList.add(new CategoryRVModal("World" , "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Top" , "https://images.unsplash.com/photo-1572949645841-094f3a9c4c94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Technology" , "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Science" , "https://images.unsplash.com/photo-1564325724739-bae0bd08762c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Sports" , "https://images.unsplash.com/photo-1611251126118-b1d4f99600a1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Business" , "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Entertainment" , "https://images.unsplash.com/photo-1586899028174-e7098604235b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"));
-        categoryRVModalArrayList.add(new CategoryRVModal("Health" , "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=499&q=80"));
+        String language_category = getLanguage();
+        categoryRVModalArrayList.clear();
+        Log.i("language >>" , language_category+"");
+        switch (language_category) {
+            case "fr":
+                category_name = getResources().getStringArray(R.array.category_array_french);
+                break;
+            case "de":
+                category_name = getResources().getStringArray(R.array.category_array_german);
+                break;
+            case "jp":
+                category_name = getResources().getStringArray(R.array.category_array_japanese);
+                break;
+            case "en":
+                category_name = getResources().getStringArray(R.array.category_array_english);
+                break;
+        }
+
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[0] , "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[1] , "https://images.unsplash.com/photo-1572949645841-094f3a9c4c94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[2] , "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[3] , "https://images.unsplash.com/photo-1564325724739-bae0bd08762c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[4] , "https://images.unsplash.com/photo-1611251126118-b1d4f99600a1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[5] , "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[6] , "https://images.unsplash.com/photo-1586899028174-e7098604235b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"));
+        categoryRVModalArrayList.add(new CategoryRVModal(category_name[7] , "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=499&q=80"));
         categoryRVAdapter.notifyDataSetChanged();
     }
 
@@ -98,12 +117,13 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     {
         loadingPB.setVisibility(View.VISIBLE);
         articelsArrayList.clear();
-        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+sharedPreferences.getString(LANGUAGE,"en");
+        String selectedLang = sharedPreferences.getString(LANGUAGE,"en");
+        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+ selectedLang;
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         if (!(category.equals("All")))
         {
-            url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language=en&category="+category;
+            url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+selectedLang+"&category="+category;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -151,10 +171,29 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        if (item.getItemId() == R.id.english) {//do somthing
-            sharedPreferences.edit().putString(LANGUAGE, "eng").apply();
-        }else if(item.getItemId() == R.id.jap){
-            sharedPreferences.edit().putString(LANGUAGE, "jap").apply();
+        if (item.getItemId() == R.id.english)
+        {
+            sharedPreferences.edit().putString(LANGUAGE, "en").apply();
+            getCategory();
+            getNews("All");
+        }
+        else if(item.getItemId() == R.id.japanese)
+        {
+            sharedPreferences.edit().putString(LANGUAGE, "jp").apply();
+            getCategory();
+            getNews("All");
+        }
+        else if(item.getItemId() == R.id.german)
+        {
+            sharedPreferences.edit().putString(LANGUAGE, "de").apply();
+            getCategory();
+            getNews("All");
+        }
+        else if(item.getItemId() == R.id.french)
+        {
+            sharedPreferences.edit().putString(LANGUAGE, "fr").apply();
+            getCategory();
+            getNews("All");
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -162,7 +201,9 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     }
 
 
-    public String getLanguage(){
+    public String getLanguage()
+    {
         return sharedPreferences.getString(LANGUAGE,"en");
     }
-}
+
+ }
