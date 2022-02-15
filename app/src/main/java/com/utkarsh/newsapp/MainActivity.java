@@ -1,11 +1,18 @@
 package com.utkarsh.newsapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -18,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 import com.utkarsh.newsapp.Adapters.CategoryRVAdapter;
 import com.utkarsh.newsapp.Adapters.NewsRVAdapter;
 
@@ -29,7 +37,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.CategoryClickInterface{
+public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.CategoryClickInterface, NavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView newsRV , categoryRV;
     private ProgressBar loadingPB;
@@ -37,11 +45,15 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     private ArrayList<CategoryRVModal> categoryRVModalArrayList;
     private CategoryRVAdapter categoryRVAdapter;
     private NewsRVAdapter newsRVAdapter;
+    DrawerLayout mDrawerLayout;
+    SharedPreferences sharedPreferences;
+    public static String LANGUAGE = "lang";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         categoryRV = findViewById(R.id.idRVCategory);
         newsRV = findViewById(R.id.idRVNews);
         loadingPB = findViewById(R.id.idPBLoading);
@@ -52,6 +64,18 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         newsRV.setLayoutManager(new LinearLayoutManager(this));
         newsRV.setAdapter(newsRVAdapter);
         categoryRV.setAdapter(categoryRVAdapter);
+
+        Toolbar toolbar = findViewById(R.id.feed_toolbar);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, toolbar, R.string.open, R.string.close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
+        mDrawerLayout.addDrawerListener(toggle);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toggle.syncState();
+
         getCategory();
         getNews("All");
         newsRVAdapter.notifyDataSetChanged();
@@ -74,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     {
         loadingPB.setVisibility(View.VISIBLE);
         articelsArrayList.clear();
-        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language=en";
+        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+sharedPreferences.getString(LANGUAGE,"en");
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         if (!(category.equals("All")))
@@ -120,6 +144,25 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     @Override
     public void onCategoryClick(int position) {
         String category = categoryRVModalArrayList.get(position).getCategory();
+        sharedPreferences.edit().putString("categories",category).apply();
         getNews(category);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        if (item.getItemId() == R.id.english) {//do somthing
+            sharedPreferences.edit().putString(LANGUAGE, "eng").apply();
+        }else if(item.getItemId() == R.id.jap){
+            sharedPreferences.edit().putString(LANGUAGE, "jap").apply();
+        }
+        //close navigation drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    public String getLanguage(){
+        return sharedPreferences.getString(LANGUAGE,"en");
     }
 }

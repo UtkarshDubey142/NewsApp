@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NyOOz</string>
-
-    <!--Read Full News-->
-    <string name="readFullNews">Read Full News</string>
+    <string name="open">Open Drawer</string>
+    <string name="close">Close Drawer</string>
 </resources>
