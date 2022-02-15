@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(MainActivity.this , "Failed To Get News" , Toast.LENGTH_LONG).show();
-                        Log.i("error >>" , "not worked");
                     }
                 });
 

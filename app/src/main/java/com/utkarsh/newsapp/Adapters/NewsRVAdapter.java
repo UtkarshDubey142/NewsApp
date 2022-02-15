@@ -39,7 +39,14 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull NewsRVAdapter.ViewHolder holder, int position) {
         Articles articles = articlesArrayList.get(position);
-        holder.subTitleTV.setText(articles.getDescription());
+        if (articles.getDescription().equals("null"))
+        {
+            holder.subTitleTV.setText(R.string.readFullNews);
+        }
+        else
+        {
+            holder.subTitleTV.setText(articles.getDescription());
+        }
         holder.titleTV.setText(articles.getTitle());
         holder.pubDate.setText("Date: " +articles.getPubDate());
         Glide.with(context).load(articles.getUrlToImage()).error(R.drawable.newsimage).into(holder.newsIV);
