@@ -19,6 +19,13 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/color_for_actionbar">
 
+            <SearchView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/search_viewID"
+                android:queryHint="Search"
+                />
+
             <ImageView
                 android:id="@+id/refresh_image_icon"
                 android:layout_width="25dp"

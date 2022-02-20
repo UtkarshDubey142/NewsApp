@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     private RecyclerView newsRV , categoryRV;
     private ImageView refreshBtn;
     private ProgressBar loadingPB;
+    private SearchView searchView_var;
     private ArrayList<Articles> articelsArrayList;
     private ArrayList<CategoryRVModal> categoryRVModalArrayList;
     private CategoryRVAdapter categoryRVAdapter;
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
 
         Toolbar toolbar = findViewById(R.id.feed_toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        // Search View Targeting
+        searchView_var = findViewById(R.id.search_viewID);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.yellow));
@@ -93,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
 
         // Calling method for category and news
         getCategory();
-        getNews("All");
+        getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
         newsRVAdapter.notifyDataSetChanged();
 
         // Refresh Operation
@@ -101,10 +105,46 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
             @Override
             public void onClick(View v) {
                 getCategory();
-                getNews("All");
+                getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
             }
         });
 
+        // Search View
+        searchView_var.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                query = query.trim();
+                if (query.length() < 4)
+                {
+                    Toast.makeText(MainActivity.this , "Enter Valid Search" , Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&qInTitle="+query+"&language=en");
+                }
+                searchView_var.setIconified(true);
+                searchView_var.onActionViewCollapsed();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    // Handing search view close operation on back-press
+    @Override
+    public void onBackPressed() {
+        if (!searchView_var.isIconified())
+        {
+            searchView_var.setIconified(true);
+            searchView_var.onActionViewCollapsed();
+        }
+        else
+        {
+            super.onBackPressed();
+        }
     }
 
     private void getCategory ()
@@ -138,18 +178,14 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         categoryRVAdapter.notifyDataSetChanged();
     }
 
-    public void getNews (String category)
+    public void getNews (String urlLink)
     {
         loadingPB.setVisibility(View.VISIBLE);
         articelsArrayList.clear();
         String selectedLang = sharedPreferences.getString(LANGUAGE,"en");
-        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+ selectedLang;
+        String url = urlLink+"&language="+ selectedLang;
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        if (!(category.equals("All")))
-        {
-            url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&language="+selectedLang+"&category="+category;
-        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -190,13 +226,16 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         queue.add(jsonObjectRequest);
     }
 
+    // Category Click
     @Override
     public void onCategoryClick(int position) {
         String category = categoryRVModalArrayList.get(position).getCategory();
         sharedPreferences.edit().putString("categories",category).apply();
-        getNews(category);
+        String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&category="+category;
+        getNews(url);
     }
 
+    // Navigation Drawer item Select
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -204,32 +243,32 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         {
             sharedPreferences.edit().putString(LANGUAGE, "en").apply();
             getCategory();
-            getNews("All");
+            getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
         }
         else if(item.getItemId() == R.id.japanese)
         {
             sharedPreferences.edit().putString(LANGUAGE, "jp").apply();
             getCategory();
-            getNews("All");
+            getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
         }
         else if(item.getItemId() == R.id.german)
         {
             sharedPreferences.edit().putString(LANGUAGE, "de").apply();
             getCategory();
-            getNews("All");
+            getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
         }
         else if(item.getItemId() == R.id.french)
         {
             sharedPreferences.edit().putString(LANGUAGE, "fr").apply();
             getCategory();
-            getNews("All");
+            getNews("https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d");
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-
+    // For current set language
     public String getLanguage()
     {
         return sharedPreferences.getString(LANGUAGE,"en");
