@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     {
         loadingPB.setVisibility(View.VISIBLE);
         articelsArrayList.clear();
+        // Adding Language to url
         String selectedLang = sharedPreferences.getString(LANGUAGE,"en");
         String url = urlLink+"&language="+ selectedLang;
         // Instantiate the RequestQueue.
@@ -194,15 +195,26 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
                     public void onResponse(JSONObject response) {
                         try
                         {
-                            loadingPB.setVisibility(View.GONE);
-                            JSONArray jsonArray = response.getJSONArray("results");
-                            for (int i = 0 ; i < jsonArray.length() ; i++)
+                            String success_response = response.getString("status");
+                            int result_count = Integer.parseInt(response.getString("totalResults"));
+                            // if request success but no results
+                            if (success_response.equals("success") && result_count == 0)
                             {
-                                JSONObject currObj = jsonArray.getJSONObject(i);
-                                articelsArrayList.add(new Articles(currObj.getString("title"),currObj.getString("description"),currObj.getString("image_url"),currObj.getString("link"),currObj.getString("content"),currObj.getString("pubDate")));
+                                Toast.makeText(MainActivity.this , "No News, try another category" , Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+                                loadingPB.setVisibility(View.GONE);
+                                JSONArray jsonArray = response.getJSONArray("results");
+                                for (int i = 0 ; i < jsonArray.length() ; i++)
+                                {
+                                    JSONObject currObj = jsonArray.getJSONObject(i);
+                                    articelsArrayList.add(new Articles(currObj.getString("title"),currObj.getString("description"),currObj.getString("image_url"),currObj.getString("link"),currObj.getString("content"),currObj.getString("pubDate")));
+                                }
+
+                                newsRVAdapter.notifyDataSetChanged();
                             }
 
-                            newsRVAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e)
                         {
@@ -229,7 +241,8 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     // Category Click
     @Override
     public void onCategoryClick(int position) {
-        String category = categoryRVModalArrayList.get(position).getCategory();
+        String [] categoryNameArr = getResources().getStringArray(R.array.category_array_english);
+        String category = categoryNameArr[position];
         sharedPreferences.edit().putString("categories",category).apply();
         String url = "https://newsdata.io/api/1/news?apikey=pub_1672b7063256110c681c9ef2584701cb7b4d&category="+category;
         getNews(url);
