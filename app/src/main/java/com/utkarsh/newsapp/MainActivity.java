@@ -11,10 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -41,6 +45,7 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.CategoryClickInterface, NavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView newsRV , categoryRV;
+    private ImageView refreshBtn;
     private ProgressBar loadingPB;
     private ArrayList<Articles> articelsArrayList;
     private ArrayList<CategoryRVModal> categoryRVModalArrayList;
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences("UserLanguage", MODE_PRIVATE);
+        refreshBtn = findViewById(R.id.refresh_image_icon);
         categoryRV = findViewById(R.id.idRVCategory);
         newsRV = findViewById(R.id.idRVNews);
         loadingPB = findViewById(R.id.idPBLoading);
@@ -74,12 +80,31 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.yellow));
         mDrawerLayout.addDrawerListener(toggle);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+
+        // changing navigation drawer menu title color
+        MenuItem tools= menu.findItem(R.id.nav_menu_languageID);
+        SpannableString s = new SpannableString(tools.getTitle());
+        s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceForMenuItem_title), 0, s.length(), 0);
+        tools.setTitle(s);
         toggle.syncState();
 
+        // Calling method for category and news
         getCategory();
         getNews("All");
         newsRVAdapter.notifyDataSetChanged();
+
+        // Refresh Operation
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCategory();
+                getNews("All");
+            }
+        });
+
     }
 
     private void getCategory ()
@@ -152,6 +177,10 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 401)
+                        {
+                            Toast.makeText(MainActivity.this , "Check Network" , Toast.LENGTH_LONG).show();
+                        }
                         Toast.makeText(MainActivity.this , "Failed To Get News" , Toast.LENGTH_LONG).show();
                     }
                 });

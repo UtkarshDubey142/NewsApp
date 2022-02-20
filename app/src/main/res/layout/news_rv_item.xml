@@ -31,7 +31,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutNewsRV"
+            android:id="@+id/linearLayoutNewsRVFirst"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVNewsHeading"
@@ -59,16 +59,34 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/idTVPubDate"
+        <LinearLayout
+            android:id="@+id/linearLayoutNewsRVSecond"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutNewsRV"
-            android:layout_margin="4dp"
-            android:padding="4dp"
-            android:text="Date"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:layout_below="@id/linearLayoutNewsRVFirst"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/idTVPubDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="7"
+                android:padding="4dp"
+                android:text="Date"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+
+            <ImageView
+                android:id="@+id/read_aloud_iconID"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/read_aloud_icon" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
