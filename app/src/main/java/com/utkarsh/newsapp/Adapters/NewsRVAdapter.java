@@ -34,11 +34,13 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
     private TextToSpeech textToSpeech;
     SharedPreferences sharedPreferences;
     private String message = "";
+    private int speakPoint = -1;
 
     // Constructor
     public NewsRVAdapter(ArrayList<Articles> articlesArrayList, Context context) {
         this.articlesArrayList = articlesArrayList;
         this.context = context;
+        this.speakPoint = -1;
 
         textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -133,19 +135,27 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
         holder.readAloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = "" ;
-                message = message + articles.getTitle() + " ";
-                if (articles.getDescription().equals("null"))
+                if ((speakPoint == holder.getAdapterPosition()) && (textToSpeech.isSpeaking()))
                 {
-                    message = message + "Read Complete News";
+                    textToSpeech.stop();
                 }
                 else
                 {
-                    message = message + articles.getDescription();
+                    String message = "" ;
+                    message = message + articles.getTitle() + " ";
+                    if (articles.getDescription().equals("null"))
+                    {
+                        message = message + "Read Complete News";
+                    }
+                    else
+                    {
+                        message = message + articles.getDescription();
+                    }
+                    Log.i("selected " , ""+message);
+                    textToSpeech.setSpeechRate(0.9f);
+                    speakPoint = holder.getAdapterPosition();
+                    textToSpeech.speak(message , TextToSpeech.QUEUE_FLUSH , null , null);
                 }
-                Log.i("selected " , ""+message);
-                textToSpeech.setSpeechRate(0.9f);
-                textToSpeech.speak(message , TextToSpeech.QUEUE_FLUSH , null , null);
             }
         });
 
@@ -166,6 +176,15 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return articlesArrayList.size();
+    }
+
+    // Method to stop text-to-speech on category change
+    public void stopSpeechOnChangeCategory ()
+    {
+        if (textToSpeech.isSpeaking())
+        {
+            textToSpeech.stop();
+        }
     }
 
 

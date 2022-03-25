@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.util.Log;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     SharedPreferences sharedPreferences;
     public static String LANGUAGE = "lang";
     String [] category_name;
+    private TextToSpeech textToSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         newsRV.setLayoutManager(new LinearLayoutManager(this));
         newsRV.setAdapter(newsRVAdapter);
         categoryRV.setAdapter(categoryRVAdapter);
+
 
         Toolbar toolbar = findViewById(R.id.feed_toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -241,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     // Category Click
     @Override
     public void onCategoryClick(int position) {
+        // Method to stop text-to-speech on category change
+        newsRVAdapter.stopSpeechOnChangeCategory();
         String [] categoryNameArr = getResources().getStringArray(R.array.category_array_english);
         String category = categoryNameArr[position];
         sharedPreferences.edit().putString("categories",category).apply();
