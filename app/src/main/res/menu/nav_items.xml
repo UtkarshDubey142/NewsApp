@@ -13,27 +13,49 @@
             <item
                 android:id="@+id/english"
                 android:icon="@drawable/translate_language_title"
-                app:showAsAction="ifRoom|withText"
-                android:title="English" />
+                android:title="English"
+                app:showAsAction="ifRoom|withText" />
 
             <item
                 android:id="@+id/japanese"
                 android:icon="@drawable/translate_language_title"
-                app:showAsAction="ifRoom|withText"
-                android:title="Japanese" />
+                android:title="Japanese"
+                app:showAsAction="ifRoom|withText" />
 
             <item
                 android:id="@+id/french"
                 android:icon="@drawable/translate_language_title"
-                app:showAsAction="ifRoom|withText"
-                android:title="French" />
+                android:title="French"
+                app:showAsAction="ifRoom|withText" />
 
             <item
                 android:id="@+id/german"
                 android:icon="@drawable/translate_language_title"
-                app:showAsAction="ifRoom|withText"
-                android:title="German" />
+                android:title="German"
+                app:showAsAction="ifRoom|withText" />
 
         </menu>
     </item>
+
+    <item
+        android:id="@+id/other_menu_ID"
+        android:orderInCategory="1"
+        android:title="@string/nav_title_val_others"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/navItem_switchID"
+                android:title="@string/international_news_switch_val"
+                app:actionLayout="@layout/news_switch"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/navItem_user_SettingsID"
+                android:title="@string/navItem_val_user_settings"
+                app:showAsAction="ifRoom|withText" />
+        </menu>
+
+    </item>
+
 </menu>

@@ -84,7 +84,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
         }
 
         holder.titleTV.setText(articles.getTitle());
-        holder.pubDate.setText("Date: " +articles.getPubDate());
+        holder.pubDate.setText("Date: " +articles.getPubDate().substring(0,16));
         Glide.with(context).load(articles.getUrlToImage()).error(R.drawable.newsimage).into(holder.newsIV);
 
         // Share Button
@@ -167,7 +167,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
                 i.putExtra("desc" , articles.getDescription());
                 i.putExtra("image" , articles.getUrlToImage());
                 i.putExtra("url" , articles.getUrl());
-                i.putExtra("date" , articles.getPubDate());
+                i.putExtra("date" , articles.getPubDate().substring(0,16));
                 context.startActivity(i);
             }
         });

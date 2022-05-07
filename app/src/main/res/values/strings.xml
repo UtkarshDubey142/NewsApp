@@ -4,5 +4,14 @@
     <string name="close">Close Drawer</string>
 
     <string name="readFullNews">Read Full News</string>
+    <string name="ageTv">Age</string>
+    <string name="country_name_here_EditText">Country Name Here</string>
+    <string name="country_name_tv">Country Name</string>
+    <string name="welcome_message_one_tv">Welcome To Nyooz App</string>
+    <string name="welcome_message_two_tv">Just Fill Some Information And Get Ready To Read News That You Like</string>
+    <string name="nav_title_val_others">Others</string>
+    <string name="international_news_switch_val">International-News</string>
+    <string name="navItem_val_user_settings">User-Settings</string>
+    <string name="userInfo_choose_category_tv">Preferred Category</string>
 
 </resources>

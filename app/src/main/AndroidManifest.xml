@@ -11,7 +11,10 @@
         android:roundIcon="@drawable/icon_for_app"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApp">
-        <activity android:name=".NewsDetailActivity"></activity>
+        <activity android:name=".UserInfoActivity">
+
+        </activity>
+        <activity android:name=".NewsDetailActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
