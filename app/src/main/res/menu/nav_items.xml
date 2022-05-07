@@ -54,6 +54,11 @@
                 android:id="@+id/navItem_user_SettingsID"
                 android:title="@string/navItem_val_user_settings"
                 app:showAsAction="ifRoom|withText" />
+
+            <item
+                android:id="@+id/navItem_savedWindowID"
+                android:title="Saved Articles"
+                app:showAsAction="ifRoom|withText"/>
         </menu>
 
     </item>

@@ -159,6 +159,15 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
             }
         });
 
+        // BookMark Option (Saved Article)
+        holder.savedArticle_Option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +200,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
     // Inner class
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTV , subTitleTV , pubDate;
-        private ImageView newsIV , shareOpt , readAloud;
+        private ImageView newsIV , shareOpt , readAloud , savedArticle_Option;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             newsIV = itemView.findViewById(R.id.idIVNews);
@@ -200,6 +209,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
             titleTV = itemView.findViewById(R.id.idTVNewsHeading);
             subTitleTV = itemView.findViewById(R.id.idTVSubTitle);
             readAloud = itemView.findViewById(R.id.read_aloud_iconID);
+            savedArticle_Option = itemView.findViewById(R.id.bookMark_optionID);
         }
     }
 

@@ -347,6 +347,11 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
             Intent userInfoIntent = new Intent(MainActivity.this , UserInfoActivity.class);
             startActivity(userInfoIntent);
         }
+        else if (item.getItemId() == R.id.navItem_savedWindowID)
+        {
+            Intent savedArticlesIntent = new Intent(MainActivity.this , SavedArticlesActivity.class);
+            startActivity(savedArticlesIntent);
+        }
 
         getCategory();
         callGetNews();
