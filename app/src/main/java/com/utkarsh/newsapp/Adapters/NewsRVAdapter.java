@@ -179,6 +179,20 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
         holder.savedArticle_Option.setOnClickListener(v -> {
 
             executorService.submit(() -> {
+                NewsTable nt = DatabaseClient.getInstance(context)
+                        .getNewsDatabase()
+                        .newsDao().getSpecificArticle(articles.getUrl());
+
+                if(nt!=null){
+                   DatabaseClient.getInstance(context)
+                            .getNewsDatabase()
+                            .newsDao().deleteData(nt);
+                    mainHandler.post(() -> holder.savedArticle_Option.setImageResource(R.drawable.blank_bookmark_icon));
+                    return;
+                }
+
+
+
                 NewsTable article = new NewsTable();
                 article.setLink(articles.getUrl());
                 article.setTitle(articles.getTitle());
@@ -189,7 +203,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
                         .insetData(article);
             });
             holder.savedArticle_Option.setImageResource(R.drawable.bookmark_added_icon);
-            Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
+          //  Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
         });
 
 
