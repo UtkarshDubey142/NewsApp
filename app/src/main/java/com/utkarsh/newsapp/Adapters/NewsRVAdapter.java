@@ -3,6 +3,8 @@ package com.utkarsh.newsapp.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,18 +13,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.utkarsh.newsapp.Articles;
-import com.utkarsh.newsapp.MainActivity;
+import com.utkarsh.newsapp.DB.DatabaseClient;
+import com.utkarsh.newsapp.DB.NewsTable;
 import com.utkarsh.newsapp.NewsDetailActivity;
 import com.utkarsh.newsapp.R;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.utkarsh.newsapp.MainActivity.LANGUAGE;
@@ -35,6 +38,8 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
     SharedPreferences sharedPreferences;
     private String message = "";
     private int speakPoint = -1;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    Handler mainHandler = new Handler(Looper.getMainLooper());   ;
 
     // Constructor
     public NewsRVAdapter(ArrayList<Articles> articlesArrayList, Context context) {
@@ -159,13 +164,32 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
             }
         });
 
-        // BookMark Option (Saved Article)
-        holder.savedArticle_Option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.savedArticle_Option.setImageResource(R.drawable.bookmark_added_icon);
-                Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
+
+        executorService.submit(() -> {
+            NewsTable nt = DatabaseClient.getInstance(context)
+                    .getNewsDatabase()
+                    .newsDao().getSpecificArticle(articles.getUrl());
+            if(nt!=null){
+                mainHandler.post(() -> holder.savedArticle_Option.setImageResource(R.drawable.bookmark_added_icon));
             }
+
+        });
+
+        // BookMark Option (Saved Article)
+        holder.savedArticle_Option.setOnClickListener(v -> {
+
+            executorService.submit(() -> {
+                NewsTable article = new NewsTable();
+                article.setLink(articles.getUrl());
+                article.setTitle(articles.getTitle());
+
+                DatabaseClient.getInstance(context)
+                        .getNewsDatabase()
+                        .newsDao()
+                        .insetData(article);
+            });
+            holder.savedArticle_Option.setImageResource(R.drawable.bookmark_added_icon);
+            Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
         });
 
 
