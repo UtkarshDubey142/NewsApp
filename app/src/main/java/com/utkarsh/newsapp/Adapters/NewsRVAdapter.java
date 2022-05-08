@@ -163,6 +163,7 @@ public class NewsRVAdapter extends RecyclerView.Adapter<NewsRVAdapter.ViewHolder
         holder.savedArticle_Option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.savedArticle_Option.setImageResource(R.drawable.bookmark_added_icon);
                 Toast.makeText(context, "Article Saved !" , Toast.LENGTH_LONG).show();
             }
         });
