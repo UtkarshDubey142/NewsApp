@@ -60,6 +60,7 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<SavedArticlesAdap
                             .getNewsDatabase()
                             .newsDao().deleteData(nt);
 
+
                     List<NewsTable> savedArticles = DatabaseClient.getInstance(context)
                             .getNewsDatabase()
                             .newsDao().selectAll();
